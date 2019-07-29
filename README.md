@@ -16,8 +16,18 @@ To run, with mock `.feature` file stored in ./mock-server, and mock listening on
 
 `$ docker run -e MOCK=1 -v "$(pwd)/mock-server:/features" karate-docker:latest`
 
-## Execute tests
+## Execute your own .feature files
 
 To run, with test feature files stored in `./features` and results being written to `./results`
 
 `$ docker run -v "$(pwd)/features:/features" -v "$(pwd)/results:/results" karate-docker:latest`
+
+# Confirm that the container is working correctly
+
+To test this container is working correctly,
+- on the Docker host network, spin up a mock on TCP/8080 (by remapping the default TCP/8999)
+- on the Docker host network, execute a test against that mock
+
+`$ docker run -e MOCK=1 -v "$(pwd)/mock-server:/features" --network="host" -p 8999:8080 karate-docker:latest &`
+
+`$ docker run -v "$(pwd)/features:/features" -v "$(pwd)/results:/results" --network="host" karate-docker:latest`
