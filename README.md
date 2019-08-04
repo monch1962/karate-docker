@@ -2,7 +2,7 @@
 
 Container to let you run Karate tests inside Docker with minimal/no knowledge of Karate
 
-Files in the `./features` and `./results` directory are placeholders for test the container itself - it's intended that they'll be overwritten when this container is used in anger.
+Files in the `./features` and `./results` directory are placeholders for testing the container itself - it's intended that they'll be overwritten when this container is used in anger.
 
 The intended use case is to supply a set of executable Karate feature files within one volume, a place to store test results in another volume, then spin up the container with both volumes and have it run tests. As tests are being executed, results will be written to the results volume; when all tests have been executed, the container will terminate itself.
 
