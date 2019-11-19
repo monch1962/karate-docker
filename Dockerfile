@@ -1,4 +1,4 @@
-FROM openjdk:12-alpine
+FROM openjdk:13-alpine
 ENV KARATE_VERSION 0.9.4
 WORKDIR /
 #ENV JAVA_OPTS='-Dkarate.config.dir=$(pwd)/config'
@@ -9,4 +9,4 @@ COPY results/ results/
 COPY config/ config/
 # ENTRYPOINT /opt/openjdk-12/bin/java -jar karate.jar -o /results /features/*.feature
 EXPOSE 8999
-ENTRYPOINT if [ -z "$MOCK" ]; then /opt/openjdk-12/bin/java $JAVA_OPTS -jar karate.jar -o /results /features/*.feature; else /opt/openjdk-12/bin/java $JAVA_OPTS -jar karate.jar -m /features/*mock.feature -p 8999; fi
+ENTRYPOINT if [ -z "$MOCK" ]; then /opt/openjdk-13/bin/java $JAVA_OPTS -jar karate.jar -o /results /features/*.feature; else /opt/openjdk-13/bin/java $JAVA_OPTS -jar karate.jar -m /features/*mock.feature -p 8999; fi
