@@ -23,7 +23,9 @@ steps:
   displayName: 'Build the Docker container image'
 
 - script: |
-    STUB_PID=$(docker run -e MOCK=1 -v "$(pwd)/mock-server:/features" -v "$(pwd)/config:/config" --network="host" -p 8999:8080 karate-docker:latest)
+    # Spin up the Karate stub in the one container, and save the PID
+    docker run -e MOCK=1 -v "$(pwd)/mock-server:/features" -v "$(pwd)/config:/config" --network="host" -p 8999:8080 karate-docker:latest &
+    STUB_PID=$!
   displayName: 'Spin up the test stub inside the Karate container'
 
 - script: |
@@ -32,8 +34,12 @@ steps:
   displayName: 'Test the stub using curl'
 
 - script: |
-    TEST_PID=$(docker run -v "$(pwd)/features:/features" -v "$(pwd)/config:/config" -v "$(pwd)/results:/results" --network="host" karate-docker:latest)
-    
+    # Spin up the Karate test in another container, and save the PID.
+    # This container should send a request to the first container, then get a response
+    # back from the stub
+    docker run -v "$(pwd)/features:/features" -v "$(pwd)/config:/config" -v "$(pwd)/results:/results" --network="host" karate-docker:latest
+    TEST_PID=$!
+
     # Kill the mock & test container instances
     kill $MOCK_PID
     kill $TEST_PID
