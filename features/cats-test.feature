@@ -1,7 +1,7 @@
 Feature: integration test
 
     Background:
-        * def port = karate.env == 'mock' ? karate.start('cats-mock.feature').port : 8080
+        * def port = karate.env == 'mock' ? karate.start('cats-mock.feature').port : 8999
         * url 'http://localhost:' + port + '/cats'
 
     Scenario: create cat
