@@ -24,7 +24,7 @@ steps:
 
 - script: |
     # Spin up the Karate stub in the one container, and save the PID
-    docker run -e MOCK=1 -v "$(pwd)/mock-server:/features" -v "$(pwd)/config:/config" --network="host" -p 8999:8080 karate-docker:latest &
+    docker run -e MOCK=1 -v "$(pwd)/mock-server:/features" -v "$(pwd)/config:/config" --network="host" karate-docker:latest &
     STUB_PID=$!
   displayName: 'Spin up the test stub inside the Karate container'
 
@@ -45,6 +45,6 @@ steps:
     TEST_PID=$!
 
     # Kill the mock & test container instances
-    kill $MOCK_PID
-    kill $TEST_PID
+    #kill $MOCK_PID
+    #kill $TEST_PID
   displayName: 'Spin up the test case inside the Karate container, and hit the test stub'  
