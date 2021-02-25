@@ -17,3 +17,24 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+
+- script: |
+    docker build . -t karate-docker
+  displayName: 'Build the Docker container image'
+
+- script: |
+    STUB_PID=$(docker run -e MOCK=1 -v "$(pwd)/mock-server:/features" -v "$(pwd)/config:/config" --network="host" -p 8999:8080 karate-docker:latest)
+  displayName: 'Spin up the test stub inside the Karate container'
+
+- script: |
+    CURL_DATA=$(curl --data "Billie" http://127.0.0.1:8999/cats)
+    echo $CURL_DATA
+  displayName: 'Test the stub using curl'
+
+- script: |
+    TEST_PID=$(docker run -v "$(pwd)/features:/features" -v "$(pwd)/config:/config" -v "$(pwd)/results:/results" --network="host" karate-docker:latest)
+    
+    # Kill the mock & test container instances
+    kill $MOCK_PID
+    kill $TEST_PID
+  displayName: 'Spin up the test case inside the Karate container, and hit the test stub'  
